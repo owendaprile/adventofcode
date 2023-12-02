@@ -1,0 +1,6 @@
+Get input as a file
+
+Read line by line, creating a vector of games
+Each game is a vector of rounds
+Each round has a count of each color seen
+Find the maximum of each color seen for each game
