@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "cargo",
+            "name": "Cargo configuration",
+            "cargoArgs": [
+                "run"
+            ],
+            "executableArgs": [
+                "example.txt"
+            ],
+        },
+    ]
+}
