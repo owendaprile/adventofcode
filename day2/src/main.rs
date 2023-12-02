@@ -135,10 +135,19 @@ fn main() {
 
     let games = read_games_from_string(std::fs::read_to_string(file_path).unwrap());
 
-    let possible_games = get_possible_games(&games, 12, 13, 14);
+    let mut sum: u64 = 0;
 
-    println!("The sum of the possible games is {}", possible_games.iter().sum::<usize>());
+    for game in games {
+        let min_possible_red = game.max_seen_for_cube(Cube::Red);
+        let min_possible_green = game.max_seen_for_cube(Cube::Green);
+        let min_possible_blue = game.max_seen_for_cube(Cube::Blue);
 
-    // given a color... figure out which games match that.
-    // do that for all colors... calculate intersection.
+        dbg!(min_possible_red, min_possible_green, min_possible_blue);
+
+        let power = min_possible_red * min_possible_green * min_possible_blue;
+
+        sum += power;
+    }
+
+    println!("The answer to part two is {}", sum);
 }
