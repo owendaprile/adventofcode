@@ -5,7 +5,7 @@ use regex::Regex;
 #[derive(Clone, Copy, Debug)]
 enum Entry {
     Number(Number),
-    Symbol,
+    Gear,
     Empty,
 }
 
@@ -15,7 +15,7 @@ struct Number {
     value: u64,
 }
 
-fn find_neighbors(map: &Vec<Vec<Entry>>, x: usize, y: usize) -> HashSet<Number> {
+fn find_neighbors(map: &Vec<Vec<Entry>>, x: usize, y: usize) -> Option<HashSet<Number>> {
     let mut neighbors: HashSet<Number> = HashSet::new();
 
     let x = x as u64;
@@ -35,7 +35,10 @@ fn find_neighbors(map: &Vec<Vec<Entry>>, x: usize, y: usize) -> HashSet<Number> 
         }
     }
 
-    neighbors
+    match neighbors.len() {
+        2 => Some(neighbors),
+        _ => None,
+    }
 }
 
 #[derive(Debug)]
@@ -63,21 +66,32 @@ impl Map {
     }
 
     fn calculate_sum_of_symbol_neighbors(&self) -> u64 {
-        let mut found: HashSet<Number> = HashSet::new();
+        let mut found: HashSet<(Number, Number)> = HashSet::new();
 
         for (i, row) in self.map.iter().enumerate() {
             for (j, val) in row.iter().enumerate() {
                 match val {
-                    Entry::Symbol => {
-                        let neighbors = find_neighbors(&self.map, i, j);
-                        found.extend(neighbors);
+                    Entry::Gear => {
+                        if let Some(neighbors) = find_neighbors(&self.map, i, j) {
+                            let mut neighbors = neighbors.iter();
+
+                            let tup = (
+                                neighbors.next().unwrap().clone(),
+                                neighbors.next().unwrap().clone(),
+                            );
+
+                            found.insert(tup);
+                        }
                     }
                     _ => (),
                 }
             }
         }
 
-        found.iter().map(|element| element.value).sum()
+        found
+            .iter()
+            .map(|element| element.0.value * element.1.value)
+            .sum()
     }
 }
 
@@ -94,7 +108,7 @@ fn main() {
 
     let mut number_index = 0;
 
-    let re = Regex::new(r"(\d+)|([^\d\n\.])").unwrap();
+    let re = Regex::new(r"(\d+)|(\*)").unwrap();
     for capture in re.captures_iter(contents.as_str()) {
         if let Some(number) = capture.get(1) {
             let x = number.start() / line_length;
@@ -116,14 +130,14 @@ fn main() {
             let x = symbol.start() / line_length;
             let y = symbol.start() % line_length;
 
-            map.set_position(x, y, Entry::Symbol);
+            map.set_position(x, y, Entry::Gear);
         }
     }
 
-    dbg!(&map);
+    //    dbg!(&map);
 
     println!(
-        "The sum of all part numbers is {}",
+        "The sum of all gear ratios is {}",
         map.calculate_sum_of_symbol_neighbors()
     );
 }
