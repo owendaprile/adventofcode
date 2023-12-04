@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "cargo",
+            "name": "cargo run -- input/puzzle.txt",
+            "cargoArgs": [ "run" ],
+            "executableArgs": [ "input/puzzle.txt" ],
+        },
+    ]
+}
