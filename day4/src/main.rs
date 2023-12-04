@@ -9,24 +9,72 @@ struct Card {
     winning_numbers: Vec<u64>,
 }
 
-fn calculate_winning_amount(cards: Vec<Card>) -> u64 {
-    let mut total = 0;
+//fn calculate_winning_amount(cards: Vec<Card>) -> u64 {
+//    let mut total = 0;
+//
+//    for card in cards {
+//        let mut matches = 0;
+//
+//        for number in card.numbers {
+//            if card.winning_numbers.contains(&number) {
+//                matches += 1;
+//            }
+//        }
+//
+//        if matches > 0 {
+//            total += u64::pow(2, matches - 1);
+//        }
+//    }
+//
+//    total
+//}
 
-    for card in cards {
+fn calculate_answer(cards: Vec<Card>) -> u64 {
+    let mut cards = cards.clone();
+
+    // loop until there are no more cards
+
+    let mut i = 0;
+    loop {
         let mut matches = 0;
 
-        for number in card.numbers {
-            if card.winning_numbers.contains(&number) {
-                matches += 1;
+        if let Some(card) = cards.get(i) {
+            for number in &card.numbers {
+                if card.winning_numbers.contains(&number) {
+                    matches += 1;
+                }
             }
+
+            for match_num in card.id..matches + card.id {
+                if let Some(card) = cards.get(match_num as usize) {
+                    cards.push(card.clone());
+                }
+            }
+
+        } else {
+            break;
         }
 
-        if matches > 0 {
-            total += u64::pow(2, matches - 1);
-        }
+        i += 1;
     }
 
-    total
+//    for card in &cards {
+//        let mut matches = 0;
+//
+//        for number in &card.numbers {
+//            if card.winning_numbers.contains(&number) {
+//                matches += 1;
+//            }
+//        }
+//
+//        for match_num in card.id..matches + card.id {
+//            if let Some(card) = cards.get(match_num as usize) {
+//                cards.push(card.clone());
+//            }
+//        }
+//    }
+
+    cards.len() as u64
 }
 
 fn main() {
@@ -35,7 +83,7 @@ fn main() {
     let contents = std::fs::read_to_string(filename).unwrap();
 
     let mut cards: Vec<Card> = vec![];
-    
+
     for line in contents.lines() {
         let mut line = line.split(":");
 
@@ -47,20 +95,15 @@ fn main() {
             .unwrap()
             .parse::<u64>()
             .unwrap();
-        dbg!(&card_number);
-
 
         let mut line = line.next().unwrap().trim().split("|");
 
         let mut winning_numbers: Vec<u64> = vec![];
         for num_str in line.next().unwrap().trim().split(" ") {
-            dbg!(&num_str);
-
             if let Ok(num) = num_str.parse::<u64>() {
                 winning_numbers.push(num);
             }
         }
-
 
         let mut numbers: Vec<u64> = vec![];
         for num_str in line.next().unwrap().trim().split(" ") {
@@ -74,11 +117,11 @@ fn main() {
             numbers,
             winning_numbers,
         };
-        
+
         cards.push(card);
     }
-    
-    let result = calculate_winning_amount(cards);
-    
+
+    let result = calculate_answer(cards);
+
     println!("Result: {}", result);
 }

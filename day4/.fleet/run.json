@@ -2,9 +2,9 @@
     "configurations": [
         {
             "type": "cargo",
-            "name": "cargo run -- input/puzzle.txt",
+            "name": "cargo run -- input/example.txt",
             "cargoArgs": [ "run" ],
-            "executableArgs": [ "input/puzzle.txt" ],
+            "executableArgs": [ "input/example.txt" ],
         },
     ]
 }
