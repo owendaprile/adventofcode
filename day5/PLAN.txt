@@ -1,0 +1,2 @@
+Each map line needs a struct that contains the source_start, dest_start, and range (offset). plus a way to convert from source to dest
+So... build a map for each blank-to-blank. Include mappings. Make a function to run a number through the map. Do this for all the maps.
