@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "run day6",
+            "type": "cargo",
+            "workingDir": "$PROJECT_DIR$",
+            "cargoArgs": [
+                "run",
+                "--package",
+                "day6",
+                "--bin",
+                "day6"
+            ],
+            "executableArgs": [
+                "input/example.txt"
+            ],
+        }
+    ]
+}
