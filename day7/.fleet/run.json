@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "run day7",
+            "type": "cargo",
+            "workingDir": "/var/home/owen/Projects/adventofcode/2023/day7",
+            "cargoArgs": [
+                "run",
+                "--package",
+                "day7",
+                "--bin",
+                "day7"
+            ],
+            "executableArgs": [
+                "input/example.txt"
+            ],
+        }
+    ]
+}
